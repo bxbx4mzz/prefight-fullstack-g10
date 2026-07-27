@@ -1,0 +1,3 @@
+Normally, the logs directory is created by docker-compose when the containers are started. 
+However, this can lead to permission issues with mounted volumes, as the owner of the logs directory will be root. 
+To avoid this, we create the logs directory and the migration file beforehand, so that the owner is the current user.
