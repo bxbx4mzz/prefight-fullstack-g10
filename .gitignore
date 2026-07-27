@@ -1,0 +1,44 @@
+# backend
+pf-backend/dist
+pf-backend/logs
+pf-backend/node_modules/
+pf-backend/migration/
+
+# db
+pf-db/.npmrc
+pf-db/node_modules/
+pf-db/migration/
+pf-db/dist/
+
+# frontend
+# frontend : Logs
+pf-frontend/logs
+
+pf-frontend/npm-debug.log*
+pf-frontend/yarn-debug.log*
+pf-frontend/yarn-error.log*
+pf-frontend/pnpm-debug.log*
+pf-frontend/lerna-debug.log*
+
+pf-frontend/node_modules/
+pf-frontend/dist/
+pf-frontend/dist-ssr
+pf-frontend/*.local
+
+# frontend : Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+pf-frontend/*.suo
+pf-frontend/*.ntvs*
+pf-frontend/*.njsproj
+pf-frontend/*.sln
+pf-frontend/*.sw?
+
+# testing
+pf-testing/node_modules/
+
+# env
+.env
+.env.*
