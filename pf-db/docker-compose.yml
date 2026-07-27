@@ -1,4 +1,4 @@
-name: preflight
+name: preflight-project-g10
 services:
   postgres:
     image: postgres:18-alpine
