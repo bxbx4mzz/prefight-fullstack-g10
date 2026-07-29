@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { type TodoItem } from "./types";
 import dayjs from "dayjs";
+import { AppLayout } from "./components/layout/AppLayout";
+
 function App() {
   const [todos, setTodos] = useState<TodoItem[]>([]);
   const [inputText, setInputText] = useState("");
@@ -69,70 +71,72 @@ function App() {
     setCurTodoId("");
   }
   return (
-    <div className="container">
-      <header>
-        <h1>Todo App</h1>
-      </header>
-      <main>
-        <div style={{ display: "flex", alignItems: "start" }}>
-          <input
-            type="text"
-            onChange={handleChange}
-            value={inputText}
-            data-cy="input-text"
-          />
-          <button onClick={handleSubmit} data-cy="submit">
-            {mode === "ADD" ? "Submit" : "Update"}
-          </button>
-          {mode === "EDIT" && (
-            <button onClick={handleCancel} className="secondary">
-              Cancel
+    <AppLayout userName="User" onLogout={() => {}}>
+      <div className="container">
+        <header>
+          <h1>Todo App</h1>
+        </header>
+        <main>
+          <div style={{ display: "flex", alignItems: "start" }}>
+            <input
+              type="text"
+              onChange={handleChange}
+              value={inputText}
+              data-cy="input-text"
+            />
+            <button onClick={handleSubmit} data-cy="submit">
+              {mode === "ADD" ? "Submit" : "Update"}
             </button>
-          )}
-        </div>
-        <div data-cy="todo-item-wrapper">
-          {todos.sort(compareDate).map((item, idx) => {
-            const { date, time } = formatDateTime(item.createdAt);
-            const text = item.todoText;
-            return (
-              <article
-                key={item.id}
-                style={{
-                  display: "flex",
-                  gap: "0.5rem",
-                }}
-              >
-                <div>({idx + 1})</div>
-                <div>📅{date}</div>
-                <div>⏰{time}</div>
-                <div data-cy="todo-item-text">📰{text}</div>
-                <div
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    setMode("EDIT");
-                    setCurTodoId(item.id);
-                    setInputText(item.todoText);
+            {mode === "EDIT" && (
+              <button onClick={handleCancel} className="secondary">
+                Cancel
+              </button>
+            )}
+          </div>
+          <div data-cy="todo-item-wrapper">
+            {todos.sort(compareDate).map((item, idx) => {
+              const { date, time } = formatDateTime(item.createdAt);
+              const text = item.todoText;
+              return (
+                <article
+                  key={item.id}
+                  style={{
+                    display: "flex",
+                    gap: "0.5rem",
                   }}
-                  data-cy="todo-item-update"
                 >
-                  {curTodoId !== item.id ? "🖊️" : "✍🏻"}
-                </div>
-
-                {mode === "ADD" && (
+                  <div>({idx + 1})</div>
+                  <div>📅{date}</div>
+                  <div>⏰{time}</div>
+                  <div data-cy="todo-item-text">📰{text}</div>
                   <div
                     style={{ cursor: "pointer" }}
-                    onClick={() => handleDelete(item.id)}
-                    data-cy="todo-item-delete"
+                    onClick={() => {
+                      setMode("EDIT");
+                      setCurTodoId(item.id);
+                      setInputText(item.todoText);
+                    }}
+                    data-cy="todo-item-update"
                   >
-                    🗑️
+                    {curTodoId !== item.id ? "🖊️" : "✍🏻"}
                   </div>
-                )}
-              </article>
-            );
-          })}
-        </div>
-      </main>
-    </div>
+
+                  {mode === "ADD" && (
+                    <div
+                      style={{ cursor: "pointer" }}
+                      onClick={() => handleDelete(item.id)}
+                      data-cy="todo-item-delete"
+                    >
+                      🗑️
+                    </div>
+                  )}
+                </article>
+              );
+            })}
+          </div>
+        </main>
+      </div>
+    </AppLayout>
   );
 }
 
