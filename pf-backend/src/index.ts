@@ -8,6 +8,11 @@ import type { ErrorRequestHandler } from "express";
 import express from "express";
 import helmet from "helmet";
 import morgan from "morgan";
+
+import bcrypt from "bcrypt";
+import { usersTable } from "@db/schema.js";
+import { signToken } from "./auth.js";
+
 const debug = Debug("pf-backend");
 
 //Intializing the express app
@@ -105,6 +110,63 @@ app.post("/todo/all", async (req, res, next) => {
       msg: `Delete all rows successfully`,
       data: {},
     });
+  } catch (err) {
+    next(err);
+  }
+});
+
+const GMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
+//register
+app.post("/auth/register", async (req, res, next) => {
+  try {
+    const { name, email, password } = req.body;
+    if (!name || !email || !password) {
+      throw new Error("Missing name, email, or password");
+    }
+
+    if (!GMAIL_REGEX.test(email)) {
+      throw new Error("Email must be a valid @gmail.com address");
+    }
+
+    const existing = await dbClient.query.usersTable.findMany({
+      where: (u, { eq }) => eq(u.email, email),
+    });
+    if (existing.length > 0) throw new Error("Email already registered");
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const result = await dbClient
+      .insert(usersTable)
+      .values({ name, email, password: hashedPassword })
+      .returning({ id: usersTable.id, name: usersTable.name, email: usersTable.email });
+
+    const user = result[0];
+    const token = signToken({ id: user.id, email: user.email });
+
+    res.json({ msg: "Register successfully", data: user, token });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// Login
+app.post("/auth/login", async (req, res, next) => {
+  try {
+    const { email, password } = req.body;
+    if (!email || !password) throw new Error("Missing email or password");
+
+    const users = await dbClient.query.usersTable.findMany({
+      where: (u, { eq }) => eq(u.email, email),
+    });
+    if (users.length === 0) throw new Error("Invalid email or password");
+
+    const user = users[0];
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) throw new Error("Invalid email or password");
+
+    const token = signToken({ id: user.id, email: user.email });
+
+    res.json({ msg: "Login successfully", token });
   } catch (err) {
     next(err);
   }
