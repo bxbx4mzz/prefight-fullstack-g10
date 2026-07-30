@@ -9,34 +9,10 @@ import {
   jsonb
 } from "drizzle-orm/pg-core";
 
-export const todoTable = pgTable("todo", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  todoText: varchar("todo_text", { length: 255 }).notNull(),
-  isDone: boolean("is_done").default(false),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
-    () => new Date()
-  ),
-});
-
-export const chatMessages = pgTable("chat_messages", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id")
-    .references(() => users.id, { onDelete: "cascade" }) //import user from login
-    .notNull(),
-  role: text("role").notNull(), // 'user' | 'assistant' | 'tool'
-  content: text("content").notNull(),
-  toolCalls: jsonb("tool_calls"), // raw tool_use / tool_result payload, handy for debugging
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-});
-
-// Placeholder table — check with whoever is building the calendar feature
-// before this ships, so we don't end up with two different "events" tables.
-// Column names here are what chat.service / overview.service expect.
 export const events = pgTable("events", {
   id: uuid("id").primaryKey().defaultRandom(),
   userId: uuid("user_id")
-    .references(() => users.id, { onDelete: "cascade" }) //import user from login
+    .references(() => usersTable.id, { onDelete: "cascade" }) //import user from login
     .notNull(),
   title: varchar("title", { length: 255 }).notNull(),
   description: text("description"),
@@ -49,3 +25,34 @@ export const events = pgTable("events", {
     () => new Date()
   ),
 });
+
+export const todoTable = pgTable("todo", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  todoText: varchar("todo_text", { length: 255 }).notNull(),
+  isDone: boolean("is_done").default(false),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const usersTable = pgTable("users", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  name: varchar("name", { length: 100 }).notNull(),
+  email: varchar("email", { length: 150 }).notNull().unique(),
+  password: varchar("password", { length: 255 }).notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const chatMessages = pgTable("chat_messages", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: uuid("user_id")
+    .references(() => usersTable.id, { onDelete: "cascade" }) //import user from login
+    .notNull(),
+  role: text("role").notNull(), // 'user' | 'assistant' | 'tool'
+  content: text("content").notNull(),
+  toolCalls: jsonb("tool_calls"), // raw tool_use / tool_result payload, handy for debugging
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+
