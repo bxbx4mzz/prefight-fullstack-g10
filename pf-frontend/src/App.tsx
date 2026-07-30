@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import TodoPage from "./pages/TodoPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import CalendarPage from "./pages/CalendarPage";
 
 function App() {
   return (
@@ -27,6 +28,14 @@ function App() {
             </ProtectedRoute>
           }
         />
+       <Route
+          path="/calendar"
+          element={
+            <ProtectedRoute>
+              <CalendarPage />
+            </ProtectedRoute>
+          }
+        />
         <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
@@ -34,3 +43,5 @@ function App() {
 }
 
 export default App;
+
+

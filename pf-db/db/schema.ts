@@ -6,7 +6,10 @@ import {
   boolean,
   text,
   integer,
-  jsonb
+  jsonb,
+  serial,
+  date,
+  time,
 } from "drizzle-orm/pg-core";
 
 export const events = pgTable("events", {
@@ -55,5 +58,12 @@ export const chatMessages = pgTable("chat_messages", {
   toolCalls: jsonb("tool_calls"), // raw tool_use / tool_result payload, handy for debugging
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
-
-
+ 
+// export const eventsTable = pgTable("events", {
+//   id: serial("id").primaryKey(),
+//   title: text("title").notNull(),
+//   description: text("description"),
+//   date: date("date").notNull(),
+//   time: time("time"), // nullable: the calendar form only requires title + date
+// });
+ 

@@ -1,36 +1,31 @@
 import "dotenv/config";
-import { dbClient } from "@db/client.js";
-import { todoTable } from "@db/schema.js";
-import cors from "cors";
-import Debug from "debug";
-import { eq } from "drizzle-orm";
-import type { ErrorRequestHandler } from "express";
 import express from "express";
+import cors from "cors";
+import { eq } from "drizzle-orm";
+import { dbClient } from "@db/client.js";
+import { todoTable, usersTable } from "@db/schema.js";
+import Debug from "debug";
+import type { ErrorRequestHandler } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-
 import bcrypt from "bcrypt";
-import { usersTable } from "@db/schema.js";
+
 import { signToken } from "./auth.js";
+// import { requireAuth } from "./middleware/requireAuth.js";
+import { chatRouter } from "./routes/Chat.routes.js";
+import { overviewRouter } from "./routes/Overview.routes.js";
+// import { eventsRouter } from "./routes/events.routes.js";
 
 const debug = Debug("pf-backend");
 
-//Intializing the express app
 const app = express();
 
-//Middleware
 app.use(morgan("dev", { immediate: false }));
 app.use(helmet());
-app.use(
-  cors({
-    origin: false, // Disable CORS
-    // origin: "*", // Allow all origins
-  }),
-);
-// Extracts the entire body portion of an incoming request stream and exposes it on req.body.
+app.use(cors());
 app.use(express.json());
 
-// Query
+// ---------- Todo (unchanged demo routes) ----------
 app.get("/todo", async (req, res, next) => {
   try {
     const results = await dbClient.query.todoTable.findMany();
@@ -40,31 +35,26 @@ app.get("/todo", async (req, res, next) => {
   }
 });
 
-// Insert
 app.put("/todo", async (req, res, next) => {
   try {
     const todoText = req.body.todoText ?? "";
     if (!todoText) throw new Error("Empty todoText");
     const result = await dbClient
       .insert(todoTable)
-      .values({
-        todoText,
-      })
+      .values({ todoText })
       .returning({ id: todoTable.id, todoText: todoTable.todoText });
-    res.json({ msg: `Insert successfully`, data: result[0] });
+    res.json({ msg: "Insert successfully", data: result[0] });
   } catch (err) {
     next(err);
   }
 });
 
-// Update
 app.patch("/todo", async (req, res, next) => {
   try {
     const id = req.body.id ?? "";
     const todoText = req.body.todoText ?? "";
     if (!todoText || !id) throw new Error("Empty todoText or id");
 
-    // Check for existence if data
     const results = await dbClient.query.todoTable.findMany({
       where: eq(todoTable.id, id),
     });
@@ -75,29 +65,24 @@ app.patch("/todo", async (req, res, next) => {
       .set({ todoText })
       .where(eq(todoTable.id, id))
       .returning({ id: todoTable.id, todoText: todoTable.todoText });
-    res.json({ msg: `Update successfully`, data: result });
+    res.json({ msg: "Update successfully", data: result });
   } catch (err) {
     next(err);
   }
 });
 
-// Delete
 app.delete("/todo", async (req, res, next) => {
   try {
     const id = req.body.id ?? "";
     if (!id) throw new Error("Empty id");
 
-    // Check for existence if data
     const results = await dbClient.query.todoTable.findMany({
       where: eq(todoTable.id, id),
     });
     if (results.length === 0) throw new Error("Invalid id");
 
     await dbClient.delete(todoTable).where(eq(todoTable.id, id));
-    res.json({
-      msg: `Delete successfully`,
-      data: { id },
-    });
+    res.json({ msg: "Delete successfully", data: { id } });
   } catch (err) {
     next(err);
   }
@@ -106,24 +91,21 @@ app.delete("/todo", async (req, res, next) => {
 app.post("/todo/all", async (req, res, next) => {
   try {
     await dbClient.delete(todoTable);
-    res.json({
-      msg: `Delete all rows successfully`,
-      data: {},
-    });
+    res.json({ msg: "Delete all rows successfully", data: {} });
   } catch (err) {
     next(err);
   }
 });
 
+// ---------- Auth ----------
 const GMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@gmail\.com$/;
-//register
+
 app.post("/auth/register", async (req, res, next) => {
   try {
     const { name, email, password } = req.body;
     if (!name || !email || !password) {
       throw new Error("Missing name, email, or password");
     }
-
     if (!GMAIL_REGEX.test(email)) {
       throw new Error("Email must be a valid @gmail.com address");
     }
@@ -149,7 +131,6 @@ app.post("/auth/register", async (req, res, next) => {
   }
 });
 
-// Login
 app.post("/auth/login", async (req, res, next) => {
   try {
     const { email, password } = req.body;
@@ -172,7 +153,16 @@ app.post("/auth/login", async (req, res, next) => {
   }
 });
 
-// JSON Error Middleware
+// ---------- Chat AI / Overview / Events ----------
+// ⚠️ mounted at /chat, /overview, /events (NO /api prefix) to match the
+// convention of /todo and /auth above — nginx strips /api before forwarding.
+// If your nginx.conf.template does NOT strip /api, change these three lines
+// to "/api/chat", "/api/overview", "/api/events" instead.
+// app.use("/chat", requireAuth, chatRouter);
+// app.use("/overview", requireAuth, overviewRouter);
+// app.use("/events", requireAuth, eventsRouter);
+
+// ---------- Error handling ----------
 const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   debug(err.message);
   const errorResponse = {
@@ -184,9 +174,8 @@ const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
 };
 app.use(jsonErrorHandler);
 
-// Running app
+// ---------- Start server ----------
 const PORT = process.env.PORT || 3000;
-// * Running app
 app.listen(PORT, async () => {
   debug(`Listening on port ${PORT}: http://localhost:${PORT}`);
 });
