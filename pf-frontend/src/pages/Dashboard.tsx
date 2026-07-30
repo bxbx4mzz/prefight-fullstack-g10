@@ -1,33 +1,23 @@
 import { useNavigate } from "react-router-dom";
+import { AppLayout } from "../components/layout/AppLayout";
+import { decodeJwtPayload } from "../lib/jwt";
 
-function Dashboard() {
+// ⚠️ adjust the field name(s) below to whatever your backend actually puts
+// in the JWT payload (e.g. `name`, `email`, `sub`) — check the response of
+// /api/auth/login or the token-signing code on the backend.
+type TokenPayload = { name?: string; email?: string };
+
+export default function CalendarApp() {
   const navigate = useNavigate();
+
+  const token = localStorage.getItem("token");
+  const payload = token ? decodeJwtPayload<TokenPayload>(token) : null;
+  const userName = payload?.name ?? payload?.email ?? "User";
 
   function handleLogout() {
     localStorage.removeItem("token");
     navigate("/login");
   }
 
-  return (
-    <div className="container" style={{ marginTop: "3rem" }}>
-      <nav>
-        <ul>
-          <li>
-            <strong>Dashboard</strong>
-          </li>
-        </ul>
-        <ul>
-          <li>
-            <button className="secondary" onClick={handleLogout}>
-              Logout
-            </button>
-          </li>
-        </ul>
-      </nav>
-      <h1>Hello, you're logged in! 🎉</h1>
-      <p>This is a protected page — only visible with a valid token.</p>
-    </div>
-  );
+  return <AppLayout userName={userName} onLogout={handleLogout} />;
 }
-
-export default Dashboard;

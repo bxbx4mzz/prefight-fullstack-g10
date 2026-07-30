@@ -23,7 +23,7 @@ export function Sidebar({
     <aside className="sidebar">
       <div className="sidebar__user">
         <span className="sidebar__user-avatar" aria-hidden="true" />
-        <span>{userName}</span>
+        <span>{userName.split("@")[0]}</span>
       </div>
 
       <nav className="sidebar__nav" aria-label="Main navigation">
