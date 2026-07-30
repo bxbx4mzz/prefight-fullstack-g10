@@ -2,6 +2,7 @@ import { useState, type ReactNode } from "react";
 import { Sidebar, type MainView } from "./Sidebar";
 import { ChatDrawer, type ChatMessage } from "../chat/ChatDrawer";
 import "./layout.css";
+import { useNavigate } from "react-router-dom";
 
 // Replace with a real call to POST /api/chat (see ai.service.ts on the backend).
 // Kept here as a stub so this component is runnable on its own.
@@ -22,6 +23,18 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
+  const navigate = useNavigate();
+   const handleNavigate = (view: MainView) => {
+    setActiveView(view);
+
+    if (view === "calendar") {
+      navigate("/calendar");
+    }
+
+    if (view === "overview") {
+      navigate("/dashboard");
+    }
+  };
 
   const handleSend = async (text: string) => {
     const userMsg: ChatMessage = { id: crypto.randomUUID(), role: "user", content: text };
@@ -43,7 +56,7 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
       <Sidebar
         userName={userName}
         activeView={activeView}
-        onNavigate={setActiveView}
+        onNavigate={handleNavigate}
         chatOpen={chatOpen}
         onToggleChat={() => setChatOpen((v) => !v)}
         onLogout={onLogout}
