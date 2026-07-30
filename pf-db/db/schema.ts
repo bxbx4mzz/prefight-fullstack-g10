@@ -1,18 +1,10 @@
-import {
-  pgTable,
-  timestamp,
-  uuid,
-  varchar,
-  boolean,
-} from "drizzle-orm/pg-core";
-
-export const todoTable = pgTable("todo", {
-  id: uuid("id").primaryKey().defaultRandom(),
-  todoText: varchar("todo_text", { length: 255 }).notNull(),
-
-  isDone: boolean("is_done").default(false),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
-    () => new Date(),
-  ),
+import { pgTable, serial, text, date, time } from "drizzle-orm/pg-core";
+ 
+export const eventsTable = pgTable("events", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  date: date("date").notNull(),
+  time: time("time"), // nullable: the calendar form only requires title + date
 });
+ 
