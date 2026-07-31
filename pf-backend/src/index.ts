@@ -11,10 +11,10 @@ import morgan from "morgan";
 import bcrypt from "bcrypt";
 
 import { signToken } from "./auth.js";
-// import { requireAuth } from "./middleware/requireAuth.js";
+import { requireAuth } from "./middleware/requireAuth.js";
 import { chatRouter } from "./routes/Chat.routes.js";
 import { overviewRouter } from "./routes/Overview.routes.js";
-// import { eventsRouter } from "./routes/events.routes.js";
+import { eventsRouter } from "./routes/events.routes.js";
 
 const debug = Debug("pf-backend");
 
@@ -153,14 +153,9 @@ app.post("/auth/login", async (req, res, next) => {
   }
 });
 
-// ---------- Chat AI / Overview / Events ----------
-// ⚠️ mounted at /chat, /overview, /events (NO /api prefix) to match the
-// convention of /todo and /auth above — nginx strips /api before forwarding.
-// If your nginx.conf.template does NOT strip /api, change these three lines
-// to "/api/chat", "/api/overview", "/api/events" instead.
-// app.use("/chat", requireAuth, chatRouter);
-// app.use("/overview", requireAuth, overviewRouter);
-// app.use("/events", requireAuth, eventsRouter);
+app.use("/chat", requireAuth, chatRouter);
+app.use("/overview", requireAuth, overviewRouter);
+app.use("/events", requireAuth, eventsRouter);
 
 // ---------- Error handling ----------
 const jsonErrorHandler: ErrorRequestHandler = (err, req, res, next) => {

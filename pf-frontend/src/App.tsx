@@ -4,7 +4,7 @@ import Register from "./pages/Register";
 import Dashboard from "./pages/Dashboard";
 import TodoPage from "./pages/TodoPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-import CalendarPage from "./pages/CalendarPage";
+import CalendarBoard from "./pages/CalendarBoard";
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
           path="/calendar"
           element={
             <ProtectedRoute>
-              <CalendarPage />
+              <CalendarBoard />
             </ProtectedRoute>
           }
         />

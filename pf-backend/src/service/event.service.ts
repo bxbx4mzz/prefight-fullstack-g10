@@ -30,6 +30,7 @@ export async function createEvent(
     start_time: string;
     end_time?: string;
     priority?: number;
+    status?: string;
   }
 ) {
   const [row] = await db
@@ -41,6 +42,7 @@ export async function createEvent(
       startTime: new Date(input.start_time),
       endTime: input.end_time ? new Date(input.end_time) : null,
       priority: input.priority ?? 3,
+      status: input.status ?? "TODO",
     })
     .returning();
   return row;
