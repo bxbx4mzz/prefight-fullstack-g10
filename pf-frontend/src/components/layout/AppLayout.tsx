@@ -23,6 +23,7 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
   const [chatOpen, setChatOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [sending, setSending] = useState(false);
+  const [calendarRefresh, setCalendarRefresh] = useState(0);
 
   const handleSend = async (text: string) => {
     const userMsg: ChatMessage = { id: crypto.randomUUID(), role: "user", content: text };
@@ -33,6 +34,18 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
       setMessages((prev) => [
         ...prev,
         { id: crypto.randomUUID(), role: "assistant", content: reply },
+      ]);
+      // AI may have added/edited/deleted an event — tell CalendarBoard to refetch
+      setCalendarRefresh((v) => v + 1);
+    } catch (err) {
+      console.error("Chat request failed:", err);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: crypto.randomUUID(),
+          role: "assistant",
+          content: "Sorry, something went wrong sending that. Check the console/network tab.",
+        },
       ]);
     } finally {
       setSending(false);
@@ -51,7 +64,12 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
       />
 
       <main className="app-shell__main">
-        {children ?? (activeView === "calendar" ? <CalendarBoard /> : <OverviewBoard />)}
+        {children ??
+          (activeView === "calendar" ? (
+            <CalendarBoard refresh={calendarRefresh} />
+          ) : (
+            <OverviewBoard />
+          ))}
       </main>
 
       <ChatDrawer

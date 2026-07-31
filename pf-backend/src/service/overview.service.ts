@@ -14,7 +14,7 @@ export async function getOverview(userId: string) {
   };
 
   for (const row of rows) {
-    if (row.status === "done" || row.status === "cancelled") continue;
+    if (row.status === "DONE") continue;
 
     if (row.startTime && row.startTime < now) {
       overview.overdue.push(row);

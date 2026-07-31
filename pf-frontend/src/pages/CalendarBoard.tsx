@@ -29,13 +29,13 @@ const PRIORITY_COLORS: Record<number, string> = {
       5: "#52fd58", 
 };
 
-const STATUSES = [
-  { value: "TODO", label: "To Do" },
-  { value: "IN_PROGRESS", label: "In Progress" },
-  { value: "DONE", label: "Done" },
-];
+type CalendarBoardProps = {
+  refresh: number;
+};
 
-export default function CalendarBoard() {
+export default function CalendarBoard({
+  refresh,
+}: CalendarBoardProps) {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [currentMonth, setCurrentMonth] = useState(dayjs());
 
@@ -49,8 +49,6 @@ export default function CalendarBoard() {
   const [priority, setPriority] = useState(3);
   const [status, setStatus] = useState("TODO");
 
-
-
   async function fetchEvents() {
     try {
       const res = await api.get<CalendarEvent[]>("/api/events");
@@ -62,7 +60,7 @@ export default function CalendarBoard() {
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [refresh]);
 
   const prevMonth = () => setCurrentMonth((m) => m.subtract(1, "month"));
   const nextMonth = () => setCurrentMonth((m) => m.add(1, "month"));

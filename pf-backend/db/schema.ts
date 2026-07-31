@@ -22,7 +22,7 @@ export const events = pgTable("events", {
   startTime: timestamp("start_time").notNull(),
   endTime: timestamp("end_time"),
   priority: integer("priority").default(3).notNull(), // 1 (highest) – 5 (lowest)
-  status: varchar("status", { length: 20 }).default("pending").notNull(), // pending | done | cancelled
+  status: varchar("status", { length: 20 }).default("TODO").notNull(), // TODO | IN_PROGRESS | DONE
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date", precision: 3 }).$onUpdate(
     () => new Date()

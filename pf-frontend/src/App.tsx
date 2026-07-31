@@ -32,7 +32,7 @@ function App() {
           path="/calendar"
           element={
             <ProtectedRoute>
-              <CalendarBoard />
+              <CalendarBoard refresh={0} />
             </ProtectedRoute>
           }
         />

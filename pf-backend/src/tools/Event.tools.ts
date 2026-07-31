@@ -1,59 +1,145 @@
-import type Anthropic from "@anthropic-ai/sdk";
+import { SchemaType } from "@google/generative-ai";
+import type { FunctionDeclaration } from "@google/generative-ai";
 
-export const eventTools: Anthropic.Tool[] = [
+export const eventTools: FunctionDeclaration[] = [
   {
     name: "list_events",
     description:
-      "List the user's calendar events/tasks, optionally filtered by date range, status, or priority.",
-    input_schema: {
-      type: "object",
+      "List the user's calendar events",
+
+    parameters: {
+      type: SchemaType.OBJECT,
+
       properties: {
-        from: { type: "string", description: "ISO date, inclusive lower bound" },
-        to: { type: "string", description: "ISO date, inclusive upper bound" },
-        status: { type: "string", enum: ["pending", "done", "cancelled"] },
-        priority: { type: "number", description: "1 (highest) to 5 (lowest)" },
+        from: {
+          type: SchemaType.STRING,
+          description: "Start date",
+        },
+
+        to: {
+          type: SchemaType.STRING,
+          description: "End date",
+        },
+
+        status: {
+          type: SchemaType.STRING,
+          enum: ["TODO", "IN_PROGRESS", "DONE"],
+          format: "enum",
+        },
+
+        priority: {
+          type: SchemaType.NUMBER,
+        },
       },
     },
   },
+
+
   {
     name: "create_event",
-    description: "Create a new calendar event/task for the user.",
-    input_schema: {
-      type: "object",
-      required: ["title", "start_time"],
+    description:
+      "Create a new calendar event",
+
+    parameters: {
+      type: SchemaType.OBJECT,
+
       properties: {
-        title: { type: "string" },
-        description: { type: "string" },
-        start_time: { type: "string", description: "ISO 8601 datetime" },
-        end_time: { type: "string", description: "ISO 8601 datetime" },
-        priority: { type: "number", description: "1 (highest) to 5 (lowest), default 3" },
+        title: {
+          type: SchemaType.STRING,
+          description: "Event title",
+        },
+
+        description: {
+          type: SchemaType.STRING,
+        },
+
+        start_time: {
+          type: SchemaType.STRING,
+          description: "ISO datetime",
+        },
+
+        end_time: {
+          type: SchemaType.STRING,
+        },
+
+        priority: {
+          type: SchemaType.NUMBER,
+        },
       },
+
+      required: [
+        "title",
+        "start_time",
+      ],
     },
   },
+
+
   {
     name: "update_event",
-    description: "Update one or more fields on an existing event, given its id.",
-    input_schema: {
-      type: "object",
-      required: ["id"],
+    description:
+      "Update an existing event",
+
+    parameters: {
+      type: SchemaType.OBJECT,
+
       properties: {
-        id: { type: "string" },
-        title: { type: "string" },
-        description: { type: "string" },
-        start_time: { type: "string" },
-        end_time: { type: "string" },
-        priority: { type: "number" },
-        status: { type: "string", enum: ["pending", "done", "cancelled"] },
+        id: {
+          type: SchemaType.STRING,
+        },
+
+        title: {
+          type: SchemaType.STRING,
+        },
+
+        description: {
+          type: SchemaType.STRING,
+        },
+
+        start_time: {
+          type: SchemaType.STRING,
+        },
+
+        end_time: {
+          type: SchemaType.STRING,
+        },
+
+        priority: {
+          type: SchemaType.NUMBER,
+        },
+
+        status: {
+          type: SchemaType.STRING,
+          enum: ["TODO", "IN_PROGRESS", "DONE"],
+          format: "enum",
+        },
       },
+
+      required:[
+        "id"
+      ],
     },
   },
+
+
   {
-    name: "delete_event",
-    description: "Delete an event by id.",
-    input_schema: {
-      type: "object",
-      required: ["id"],
-      properties: { id: { type: "string" } },
-    },
-  },
+    name:"delete_event",
+
+    description:
+      "Delete an event",
+
+    parameters:{
+      type: SchemaType.OBJECT,
+
+      properties:{
+        id:{
+          type: SchemaType.STRING
+        }
+      },
+
+      required:[
+        "id"
+      ]
+    }
+  }
 ];
