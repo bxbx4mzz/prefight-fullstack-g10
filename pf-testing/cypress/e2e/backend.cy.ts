@@ -1,108 +1,130 @@
-before(() => {
-  const url = Cypress.expose("BACKEND_URL");
-  cy.request({
-    method: "POST",
-    url: `${url}/todo/all`,
+describe("Login", () => {
+
+  it("user can login", () => {
+
+    cy.visit("http://localhost:5173/login");
+
+
+    cy.get("[data-cy=email]")
+      .type("john@gmail.com");
+
+
+    cy.get("[data-cy=password]")
+      .type("john1234");
+
+
+    cy.get("[data-cy=login-button]")
+      .click();
+
+
+    // ตรวจว่าหน้าเปลี่ยน
+    cy.url()
+      .should("include", "/dashboard");
+
+
+    // ตรวจ token
+    cy.window()
+      .then((win) => {
+
+        const token =
+          win.localStorage.getItem("token");
+
+        expect(token)
+          .to.exist;
+
+      });
+
   });
+
+
+  it("shows error with wrong password",()=>{
+
+    cy.visit("http://localhost:5173/login");
+
+
+    cy.get("[data-cy=email]")
+      .type("test@example.com");
+
+
+    cy.get("[data-cy=password]")
+      .type("wrongpassword");
+
+
+    cy.get("[data-cy=login-button]")
+      .click();
+
+
+    cy.get("[data-cy=login-error]")
+    .should("exist")
+    .and("not.be.empty");
+
+  });
+
 });
 
-describe("Backend", () => {
-  it("checks env", () => {
-    cy.log(JSON.stringify(Cypress.expose()));
-  });
+describe("Backend Overview", () => {
 
-  it("checks CORS disabled", () => {
-    const url = Cypress.expose("BACKEND_URL");
-    cy.request({
-      method: "GET",
-      url: `${url}/todo`,
-    }).then((res) => {
-      // cy.log(JSON.stringify(res));
-      expect(res.headers).to.not.have.property("access-control-allow-origin");
-    });
-  });
+  const url = "http://localhost:3001";
 
-  it("checks get response", () => {
-    const url = Cypress.expose("BACKEND_URL");
-    cy.request({
-      method: "GET",
-      url: `${url}/todo`,
-    }).then((res) => {
-      expect(res.body).to.be.a("array");
-    });
-  });
+  let token = "";
 
-  it("creates todo", () => {
-    const url = Cypress.expose("BACKEND_URL");
+
+  before(() => {
+
     cy.request({
-      method: "PUT",
-      url: `${url}/todo`,
+      method: "POST",
+      url: `${url}/auth/login`,
       body: {
-        todoText: "New Todo",
-      },
+        email: "john@gmail.com",
+        password: "john1234"
+      }
     }).then((res) => {
-      cy.log(JSON.stringify(res.body));
-      expect(res.body).to.have.all.keys("msg", "data");
-      expect(res.body.data).to.all.keys("id", "todoText");
+
+      expect(res.status)
+        .eq(200);
+
+      token = res.body.token;
+
     });
+
   });
 
-  it("deletes todo", () => {
-    const url = Cypress.expose("BACKEND_URL");
 
-    cy.request({
-      method: "PUT",
-      url: `${url}/todo`,
-      body: {
-        todoText: "New Todo",
-      },
-    }).then((res) => {
-      const todo = res.body.data;
-      cy.request({
-        method: "DELETE",
-        url: `${url}/todo`,
-        body: {
-          id: todo.id,
-        },
-      }).then((res) => {
-        cy.log(JSON.stringify(res.body));
-        expect(res.body).to.have.all.keys("msg", "data");
-        expect(res.body.data).to.all.keys("id");
-      });
-    });
+
+  it("gets overview", () => {
+
+  cy.request({
+
+    method: "GET",
+
+    url: `${url}/overview`,
+
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+
+  }).then((res) => {
+
+
+    expect(res.status)
+      .eq(200);
+
+
+    expect(res.body)
+      .to.be.an("object");
+
+
+    expect(res.body)
+      .to.have.keys(
+        "overdue",
+        "high",
+        "medium",
+        "low"
+      );
+
+
   });
 
-  it("updates todo", () => {
-    const url = Cypress.expose("BACKEND_URL");
+});
 
-    cy.request({
-      method: "PUT",
-      url: `${url}/todo`,
-      body: {
-        todoText: "New Todo",
-      },
-    }).then((res) => {
-      const todo = res.body.data;
-      cy.wrap(todo.id).as("currentId"); // Storing id for using later in the chain
-      cy.request({
-        method: "PATCH",
-        url: `${url}/todo`,
-        body: {
-          id: todo.id,
-          todoText: "Updated Text",
-        },
-      }).then((res) => {
-        cy.request({
-          method: "GET",
-          url: `${url}/todo`,
-        }).then(function (res) {
-          // Notice that arrow function is not used here due to "this" issue
-          const currentId = this.currentId; // Get value from context
-          const todos = res.body;
-          const todo = todos.find((el: any) => el.id === currentId);
-          expect(todo.todoText).to.equal("Updated Text");
-        });
-      });
-    });
-  });
 });
