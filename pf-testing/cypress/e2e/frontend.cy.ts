@@ -1,58 +1,135 @@
-before(() => {
-  const url = Cypress.expose("BACKEND_URL");
-  cy.request({
-    method: "POST",
-    url: `${url}/todo/all`,
+describe("Frontend Login", () => {
+
+  const url = "http://localhost:5173";
+
+
+  it("connects", () => {
+
+    cy.visit(`${url}/login`);
+
   });
+
+
+  it("login success", () => {
+
+    cy.visit(`${url}/login`);
+
+
+    cy.get("input[type='email']")
+      .type("john@gmail.com");
+
+
+    cy.get("input[type='password']")
+      .type("john1234");
+
+
+    cy.get("button[type='submit']")
+      .click();
+
+
+    cy.url()
+      .should("include", "/dashboard");
+
+
+    cy.window()
+      .then((win) => {
+
+        const token =
+          win.localStorage.getItem("token");
+
+
+        expect(token)
+          .to.exist;
+
+      });
+
+  });
+
+
+  it("login failed", () => {
+
+    cy.visit(`${url}/login`);
+
+
+    cy.get("input[type='email']")
+      .type("test@example.com");
+
+
+    cy.get("input[type='password']")
+      .type("wrongpassword");
+
+
+    cy.get("button[type='submit']")
+      .click();
+
+
+    cy.contains(
+      "Invalid email or password"
+    )
+    .should("exist");
+
+  });
+
+
 });
 
-describe("Frontend", () => {
-  it("connects", () => {
-    const url = Cypress.expose("FRONTEND_URL");
-    cy.visit(url);
-  });
-  it("creates todo", () => {
-    const url = Cypress.expose("FRONTEND_URL");
-    const text = new Date().getTime().toString();
-    cy.visit(url);
-    cy.get("[data-cy='input-text']").type(text);
-    cy.get("[data-cy='submit']").click();
-    cy.contains(text);
-  });
+describe("Frontend Overview", () => {
 
-  it("deletes todo", () => {
-    const url = Cypress.expose("FRONTEND_URL");
+  const url = "http://localhost:5173";
 
-    const text = new Date().getTime().toString();
-    cy.visit(url);
-    cy.get("[data-cy='input-text']").type(text);
-    cy.get("[data-cy='submit']").click();
-    cy.get("[data-cy='todo-item-wrapper']")
-      .contains(text)
-      .parent()
-      .within(() => {
-        cy.get("[data-cy='todo-item-delete']").click();
-      });
-    cy.contains(text).should("not.exist");
+
+  beforeEach(() => {
+
+    cy.visit(`${url}/login`);
+
+
+    cy.get("input[type='email']")
+      .type("john@gmail.com");
+
+
+    cy.get("input[type='password']")
+      .type("john1234");
+
+
+    cy.get("button[type='submit']")
+      .click();
+
+
+    cy.url()
+      .should("include", "/dashboard");
+
+
   });
 
-  it("updates todo", () => {
-    const url = Cypress.expose("FRONTEND_URL");
 
-    const text = new Date().getTime().toString();
-    const textUpdated = "123456";
-    cy.visit(url);
-    cy.get("[data-cy='input-text']").type(text);
-    cy.get("[data-cy='submit']").click();
-    cy.get("[data-cy='todo-item-wrapper']")
-      .contains(text)
-      .parent()
-      .within(() => {
-        cy.get("[data-cy='todo-item-update']").click();
-      });
-    cy.get("[data-cy='input-text']").clear().type(textUpdated);
-    cy.get("[data-cy='submit']").click();
-    cy.contains(textUpdated);
-    cy.contains(text).should("not.exist");
-  });
+  it("connects overview page", () => {
+
+  cy.visit("http://localhost:5173/dashboard");
+
+
+  cy.window()
+    .then((win)=>{
+
+      const token =
+        win.localStorage.getItem("token");
+
+      expect(token)
+        .to.exist;
+
+    });
+
+
+  it("connects overview data on dashboard", () => {
+
+  cy.visit(
+    "http://localhost:5173/dashboard"
+  );
+
+
+  cy.contains("Overview")
+    .should("exist");
+
+});
+});
+
 });
