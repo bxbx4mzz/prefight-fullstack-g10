@@ -40,3 +40,223 @@ To avoid this, we create the logs directory and the migration file beforehand, s
 [2026-08-01 04:07:27] [2K[1G[✓] migrations applied successfully!
 [2026-08-01 04:14:29] No config path provided, using default 'drizzle.config.ts'
 [2026-08-01 04:14:29] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 04:19:49] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 04:19:49] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 04:36:57] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 04:36:57] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 04:36:58] Using 'postgres' driver for database querying
+[2026-08-01 04:36:59] [⣷] applying migrations...{
+[2026-08-01 04:36:59]   severity_local: 'NOTICE',
+[2026-08-01 04:36:59]   severity: 'NOTICE',
+[2026-08-01 04:36:59]   code: '42P06',
+[2026-08-01 04:36:59]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 04:36:59]   file: 'schemacmds.c',
+[2026-08-01 04:36:59]   line: '132',
+[2026-08-01 04:36:59]   routine: 'CreateSchemaCommand'
+[2026-08-01 04:36:59] }
+[2026-08-01 04:36:59] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 07:08:31] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 07:08:31] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 07:08:31] Using 'postgres' driver for database querying
+[2026-08-01 07:08:32] [⣷] applying migrations...{
+[2026-08-01 07:08:32]   severity_local: 'NOTICE',
+[2026-08-01 07:08:32]   severity: 'NOTICE',
+[2026-08-01 07:08:32]   code: '42P06',
+[2026-08-01 07:08:32]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 07:08:32]   file: 'schemacmds.c',
+[2026-08-01 07:08:32]   line: '132',
+[2026-08-01 07:08:32]   routine: 'CreateSchemaCommand'
+[2026-08-01 07:08:32] }
+[2026-08-01 07:08:32] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 08:41:20] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 08:41:20] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 08:41:20] Using 'postgres' driver for database querying
+[2026-08-01 08:41:21] [⣷] applying migrations...{
+[2026-08-01 08:41:21]   severity_local: 'NOTICE',
+[2026-08-01 08:41:21]   severity: 'NOTICE',
+[2026-08-01 08:41:21]   code: '42P06',
+[2026-08-01 08:41:21]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 08:41:21]   file: 'schemacmds.c',
+[2026-08-01 08:41:21]   line: '132',
+[2026-08-01 08:41:21]   routine: 'CreateSchemaCommand'
+[2026-08-01 08:41:21] }
+[2026-08-01 08:41:21] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 08:41:47] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 08:41:47] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 08:41:48] Using 'postgres' driver for database querying
+[2026-08-01 08:41:48] [⣷] Pulling schema from database...
+[2026-08-01 08:41:49] [2K[1G[✓] Pulling schema from database...
+[2026-08-01 08:41:49] 
+[2026-08-01 08:41:49]  Warning  You are about to execute current statements:
+[2026-08-01 08:41:49] 
+[2026-08-01 08:41:49] CREATE TABLE "chat_messages" (
+[2026-08-01 08:41:49] 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+[2026-08-01 08:41:49] 	"user_id" uuid NOT NULL,
+[2026-08-01 08:41:49] 	"role" text NOT NULL,
+[2026-08-01 08:41:49] 	"content" text NOT NULL,
+[2026-08-01 08:41:49] 	"tool_calls" jsonb,
+[2026-08-01 08:41:49] 	"created_at" timestamp DEFAULT now() NOT NULL
+[2026-08-01 08:41:49] );
+[2026-08-01 08:41:49] 
+[2026-08-01 08:41:49] CREATE TABLE "events" (
+[2026-08-01 08:41:49] 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+[2026-08-01 08:41:49] 	"user_id" uuid NOT NULL,
+[2026-08-01 08:41:49] 	"title" varchar(255) NOT NULL,
+[2026-08-01 08:41:49] 	"description" text,
+[2026-08-01 08:41:49] 	"start_time" timestamp NOT NULL,
+[2026-08-01 08:41:49] 	"end_time" timestamp,
+[2026-08-01 08:41:49] 	"priority" integer DEFAULT 3 NOT NULL,
+[2026-08-01 08:41:49] 	"status" varchar(20) DEFAULT 'TODO' NOT NULL,
+[2026-08-01 08:41:49] 	"created_at" timestamp DEFAULT now() NOT NULL,
+[2026-08-01 08:41:49] 	"updated_at" timestamp (3)
+[2026-08-01 08:41:49] );
+[2026-08-01 08:41:49] 
+[2026-08-01 08:41:49] CREATE TABLE "todo" (
+[2026-08-01 08:41:49] 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+[2026-08-01 08:41:49] 	"todo_text" varchar(255) NOT NULL,
+[2026-08-01 08:41:49] 	"is_done" boolean DEFAULT false,
+[2026-08-01 08:41:49] 	"created_at" timestamp DEFAULT now() NOT NULL,
+[2026-08-01 08:41:49] 	"updated_at" timestamp (3)
+[2026-08-01 08:41:49] );
+[2026-08-01 08:41:49] 
+[2026-08-01 08:41:49] CREATE TABLE "users" (
+[2026-08-01 08:41:49] 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
+[2026-08-01 08:41:49] 	"name" varchar(100) NOT NULL,
+[2026-08-01 08:41:49] 	"email" varchar(150) NOT NULL,
+[2026-08-01 08:41:49] 	"password" varchar(255) NOT NULL,
+[2026-08-01 08:41:49] 	"created_at" timestamp DEFAULT now() NOT NULL,
+[2026-08-01 08:41:49] 	CONSTRAINT "users_email_unique" UNIQUE("email")
+[2026-08-01 08:41:49] );
+[2026-08-01 08:41:49] 
+[2026-08-01 08:41:49] ALTER TABLE "chat_messages" ADD CONSTRAINT "chat_messages_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+[2026-08-01 08:41:49] ALTER TABLE "events" ADD CONSTRAINT "events_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
+[2026-08-01 08:41:49] 
+[2026-08-01 08:45:03] $ drizzle-kit generate
+[2026-08-01 08:45:03] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 08:45:03] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 08:45:04] 4 tables
+[2026-08-01 08:45:04] chat_messages 6 columns 0 indexes 1 fks
+[2026-08-01 08:45:04] events 10 columns 0 indexes 1 fks
+[2026-08-01 08:45:04] todo 5 columns 0 indexes 0 fks
+[2026-08-01 08:45:04] users 5 columns 0 indexes 0 fks
+[2026-08-01 08:45:04] 
+[2026-08-01 08:45:04] [✓] Your SQL migration file ➜ db/migration/0001_futuristic_longshot.sql 🚀
+[2026-08-01 08:45:05] $ drizzle-kit migrate
+[2026-08-01 08:45:05] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 08:45:05] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 08:45:05] Using 'postgres' driver for database querying
+[2026-08-01 08:45:06] [⣷] applying migrations...{
+[2026-08-01 08:45:06]   severity_local: 'NOTICE',
+[2026-08-01 08:45:06]   severity: 'NOTICE',
+[2026-08-01 08:45:06]   code: '42P06',
+[2026-08-01 08:45:06]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 08:45:06]   file: 'schemacmds.c',
+[2026-08-01 08:45:06]   line: '132',
+[2026-08-01 08:45:06]   routine: 'CreateSchemaCommand'
+[2026-08-01 08:45:06] }
+[2026-08-01 08:45:06] [2K[1G[⣷] applying migrations...[ELIFECYCLE] Command failed with exit code 1.
+[2026-08-01 09:12:10] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 09:12:10] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 09:12:11] Using 'postgres' driver for database querying
+[2026-08-01 09:12:11] [⣷] applying migrations...{
+[2026-08-01 09:12:11]   severity_local: 'NOTICE',
+[2026-08-01 09:12:11]   severity: 'NOTICE',
+[2026-08-01 09:12:11]   code: '42P06',
+[2026-08-01 09:12:11]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 09:12:11]   file: 'schemacmds.c',
+[2026-08-01 09:12:11]   line: '132',
+[2026-08-01 09:12:11]   routine: 'CreateSchemaCommand'
+[2026-08-01 09:12:11] }
+[2026-08-01 09:12:11] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 09:13:24] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 09:13:24] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 09:13:25] Using 'postgres' driver for database querying
+[2026-08-01 09:13:25] [⣷] applying migrations...{
+[2026-08-01 09:13:25]   severity_local: 'NOTICE',
+[2026-08-01 09:13:25]   severity: 'NOTICE',
+[2026-08-01 09:13:25]   code: '42P06',
+[2026-08-01 09:13:25]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 09:13:25]   file: 'schemacmds.c',
+[2026-08-01 09:13:25]   line: '132',
+[2026-08-01 09:13:25]   routine: 'CreateSchemaCommand'
+[2026-08-01 09:13:25] }
+[2026-08-01 09:13:25] {
+[2026-08-01 09:13:25]   severity_local: 'NOTICE',
+[2026-08-01 09:13:25]   severity: 'NOTICE',
+[2026-08-01 09:13:25]   code: '42P07',
+[2026-08-01 09:13:25]   message: 'relation "__drizzle_migrations" already exists, skipping',
+[2026-08-01 09:13:25]   file: 'parse_utilcmd.c',
+[2026-08-01 09:13:25]   line: '208',
+[2026-08-01 09:13:25]   routine: 'transformCreateStmt'
+[2026-08-01 09:13:25] }
+[2026-08-01 09:13:25] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 09:17:41] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 09:17:41] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 09:17:41] Using 'postgres' driver for database querying
+[2026-08-01 09:17:42] [⣷] applying migrations...[2K[1G[⣯] applying migrations...{
+[2026-08-01 09:17:42]   severity_local: 'NOTICE',
+[2026-08-01 09:17:42]   severity: 'NOTICE',
+[2026-08-01 09:17:42]   code: '42P06',
+[2026-08-01 09:17:42]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 09:17:42]   file: 'schemacmds.c',
+[2026-08-01 09:17:42]   line: '132',
+[2026-08-01 09:17:42]   routine: 'CreateSchemaCommand'
+[2026-08-01 09:17:42] }
+[2026-08-01 09:17:42] {
+[2026-08-01 09:17:42]   severity_local: 'NOTICE',
+[2026-08-01 09:17:42]   severity: 'NOTICE',
+[2026-08-01 09:17:42]   code: '42P07',
+[2026-08-01 09:17:42]   message: 'relation "__drizzle_migrations" already exists, skipping',
+[2026-08-01 09:17:42]   file: 'parse_utilcmd.c',
+[2026-08-01 09:17:42]   line: '208',
+[2026-08-01 09:17:42]   routine: 'transformCreateStmt'
+[2026-08-01 09:17:42] }
+[2026-08-01 09:17:42] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 09:24:15] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 09:24:15] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 09:24:15] Using 'postgres' driver for database querying
+[2026-08-01 09:24:15] [⣷] applying migrations...{
+[2026-08-01 09:24:15]   severity_local: 'NOTICE',
+[2026-08-01 09:24:15]   severity: 'NOTICE',
+[2026-08-01 09:24:15]   code: '42P06',
+[2026-08-01 09:24:15]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 09:24:15]   file: 'schemacmds.c',
+[2026-08-01 09:24:15]   line: '132',
+[2026-08-01 09:24:15]   routine: 'CreateSchemaCommand'
+[2026-08-01 09:24:15] }
+[2026-08-01 09:24:16] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 09:25:30] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 09:25:30] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 09:25:30] Using 'postgres' driver for database querying
+[2026-08-01 09:25:31] [⣷] applying migrations...{
+[2026-08-01 09:25:31]   severity_local: 'NOTICE',
+[2026-08-01 09:25:31]   severity: 'NOTICE',
+[2026-08-01 09:25:31]   code: '42P06',
+[2026-08-01 09:25:31]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 09:25:31]   file: 'schemacmds.c',
+[2026-08-01 09:25:31]   line: '132',
+[2026-08-01 09:25:31]   routine: 'CreateSchemaCommand'
+[2026-08-01 09:25:31] }
+[2026-08-01 09:25:31] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 09:26:55] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 09:26:55] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 09:26:55] Using 'postgres' driver for database querying
+[2026-08-01 09:26:56] [⣷] applying migrations...{
+[2026-08-01 09:26:56]   severity_local: 'NOTICE',
+[2026-08-01 09:26:56]   severity: 'NOTICE',
+[2026-08-01 09:26:56]   code: '42P06',
+[2026-08-01 09:26:56]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 09:26:56]   file: 'schemacmds.c',
+[2026-08-01 09:26:56]   line: '132',
+[2026-08-01 09:26:56]   routine: 'CreateSchemaCommand'
+[2026-08-01 09:26:56] }
+[2026-08-01 09:26:56] {
+[2026-08-01 09:26:56]   severity_local: 'NOTICE',
+[2026-08-01 09:26:56]   severity: 'NOTICE',
+[2026-08-01 09:26:56]   code: '42P07',
+[2026-08-01 09:26:56]   message: 'relation "__drizzle_migrations" already exists, skipping',
+[2026-08-01 09:26:56]   file: 'parse_utilcmd.c',
+[2026-08-01 09:26:56]   line: '208',
+[2026-08-01 09:26:56]   routine: 'transformCreateStmt'
+[2026-08-01 09:26:56] }
+[2026-08-01 09:26:56] [2K[1G[✓] migrations applied successfully!

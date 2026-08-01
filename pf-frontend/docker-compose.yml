@@ -1,4 +1,4 @@
-name: preflight-project-g10 # You can also change this to another name to avoid warning with existing group.
+name: g10 # You can also change this to another name to avoid warning with existing group.
 services:
   frontend:
     container_name: pf-frontend

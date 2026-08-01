@@ -36,6 +36,8 @@ services:
       - POSTGRES_HOST=${PROJECT_NAME}-db
       - POSTGRES_APP_USER=${POSTGRES_APP_USER}
       - POSTGRES_APP_PASSWORD=${POSTGRES_APP_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
     volumes:
       - ./logs:/app/logs
     post_start:
