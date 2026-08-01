@@ -13,6 +13,7 @@ services:
       - POSTGRES_HOST=${POSTGRES_HOST}
       - POSTGRES_APP_USER=${POSTGRES_APP_USER}
       - POSTGRES_APP_PASSWORD=${POSTGRES_APP_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}
     volumes:
       - ./logs:/app/logs
     post_start:
