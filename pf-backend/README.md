@@ -12,5 +12,5 @@
 
 # Push to dockerhub
 
-- `docker tag preflight-backend [DOCKERHUB_ACCOUNT]/preflight-backend:latest`
-- `docker push [DOCKERHUB_ACCOUNT]/preflight-backend:latest`
+- `docker tag preflight-project-g10-backend [DOCKERHUB_ACCOUNT]/prefligh-project-g10-backend:latest`
+- `docker push [DOCKERHUB_ACCOUNT]/preflight-project-g10-backend:latest`

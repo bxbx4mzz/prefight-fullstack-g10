@@ -12,9 +12,9 @@
 
 # Just building (no running)
 
-- `docker build -t preflight-frontend:latest .`
+- `docker build -t preflight-project-g10-frontend:latest .`
 
 # Push to dockerhub
 
-- `docker tag preflight-frontend [DOCKERHUB_ACCOUNT]/preflight-frontend:latest`
-- `docker push [DOCKERHUB_ACCOUNT]/preflight-frontend:latest`
+- `docker tag preflight-project-g10-frontend [DOCKERHUB_ACCOUNT]/preflight-project-g10-frontend:latest`
+- `docker push [DOCKERHUB_ACCOUNT]/preflight-project-g10-frontend:latest`
