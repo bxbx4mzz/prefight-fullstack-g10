@@ -25,3 +25,18 @@ To avoid this, we create the logs directory and the migration file beforehand, s
 [2026-07-31 11:59:55]   routine: 'CreateSchemaCommand'
 [2026-07-31 11:59:55] }
 [2026-07-31 11:59:55] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 04:07:26] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 04:07:26] Reading config file '/app/drizzle.config.ts'
+[2026-08-01 04:07:27] Using 'postgres' driver for database querying
+[2026-08-01 04:07:27] [⣷] applying migrations...{
+[2026-08-01 04:07:27]   severity_local: 'NOTICE',
+[2026-08-01 04:07:27]   severity: 'NOTICE',
+[2026-08-01 04:07:27]   code: '42P06',
+[2026-08-01 04:07:27]   message: 'schema "drizzle" already exists, skipping',
+[2026-08-01 04:07:27]   file: 'schemacmds.c',
+[2026-08-01 04:07:27]   line: '132',
+[2026-08-01 04:07:27]   routine: 'CreateSchemaCommand'
+[2026-08-01 04:07:27] }
+[2026-08-01 04:07:27] [2K[1G[✓] migrations applied successfully!
+[2026-08-01 04:14:29] No config path provided, using default 'drizzle.config.ts'
+[2026-08-01 04:14:29] Reading config file '/app/drizzle.config.ts'
