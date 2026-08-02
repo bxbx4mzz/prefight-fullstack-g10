@@ -5,6 +5,7 @@ import OverviewBoard from "../../pages/OverviewBoard";
 import CalendarBoard from "../../pages/CalendarBoard";
 import { api } from "../../api/client";
 import "./layout.css";
+import { v4 as uuidv4 } from "uuid";
 
 async function sendMessage(text: string): Promise<string> {
   const { data } = await api.post<{ reply: string }>("/api/chat", { message: text });
@@ -14,7 +15,6 @@ async function sendMessage(text: string): Promise<string> {
 type AppLayoutProps = {
   userName: string;
   onLogout: () => void;
-  /** Optional: render your own content in the main area instead of the built-in placeholders. */
   children?: ReactNode;
 };
 
@@ -26,14 +26,14 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
   const [calendarRefresh, setCalendarRefresh] = useState(0);
 
   const handleSend = async (text: string) => {
-    const userMsg: ChatMessage = { id: crypto.randomUUID(), role: "user", content: text };
+    const userMsg: ChatMessage = { id: uuidv4(), role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setSending(true);
     try {
       const reply = await sendMessage(text);
       setMessages((prev) => [
         ...prev,
-        { id: crypto.randomUUID(), role: "assistant", content: reply },
+        { id: uuidv4(), role: "assistant", content: reply },
       ]);
       // AI may have added/edited/deleted an event — tell CalendarBoard to refetch
       setCalendarRefresh((v) => v + 1);
@@ -42,7 +42,7 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
       setMessages((prev) => [
         ...prev,
         {
-          id: crypto.randomUUID(),
+          id: uuidv4(),
           role: "assistant",
           content: "Sorry, something went wrong sending that. Check the console/network tab.",
         },
