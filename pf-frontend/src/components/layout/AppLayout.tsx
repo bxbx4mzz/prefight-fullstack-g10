@@ -5,7 +5,14 @@ import OverviewBoard from "../../pages/OverviewBoard";
 import CalendarBoard from "../../pages/CalendarBoard";
 import { api } from "../../api/client";
 import "./layout.css";
-import { v4 as uuidv4 } from "uuid";
+
+function generateId(): string {
+  if (typeof crypto !== "undefined" && typeof crypto.randomUUID === "function") {
+    return crypto.randomUUID();
+  }
+  return `id-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+ 
 
 async function sendMessage(text: string): Promise<string> {
   const { data } = await api.post<{ reply: string }>("/api/chat", { message: text });
@@ -26,14 +33,14 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
   const [calendarRefresh, setCalendarRefresh] = useState(0);
 
   const handleSend = async (text: string) => {
-    const userMsg: ChatMessage = { id: uuidv4(), role: "user", content: text };
+    const userMsg: ChatMessage = { id: generateId(), role: "user", content: text };
     setMessages((prev) => [...prev, userMsg]);
     setSending(true);
     try {
       const reply = await sendMessage(text);
       setMessages((prev) => [
         ...prev,
-        { id: uuidv4(), role: "assistant", content: reply },
+        { id: generateId(), role: "assistant", content: reply },
       ]);
       // AI may have added/edited/deleted an event — tell CalendarBoard to refetch
       setCalendarRefresh((v) => v + 1);
@@ -42,7 +49,7 @@ export function AppLayout({ userName, onLogout, children }: AppLayoutProps) {
       setMessages((prev) => [
         ...prev,
         {
-          id: uuidv4(),
+          id: generateId(),
           role: "assistant",
           content: "Sorry, something went wrong sending that. Check the console/network tab.",
         },
